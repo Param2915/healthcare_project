@@ -4,6 +4,8 @@ const connectDb=require("./config/dbConnection");
 const errorHandler=require("./middleware/errorHandler");
 const cors=require("cors");
 
+hbs.registerPartials(__dirname+'/views/partials',function(err) {});
+
 //env file config
 const dotenv =require("dotenv");
 dotenv.config();
@@ -14,6 +16,11 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
+
+//Route for user registration and Authentication
+app.use("/api/register",require("./routes/userRoutes"));
+
+
 //error handling middleware
 app.use(errorHandler);
 
@@ -30,7 +37,7 @@ app.get("/home",(req,res)=>{
 
 app.get("/allusers",(req,res)=>{
     res.render("users",{
-        users:[
+        usersp :[
             {id:1,username:"abc",age:18},
             {id:1,username:"xyz",age:19}
         ]
