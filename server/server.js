@@ -3,8 +3,12 @@ const express = require("express");
 const connectDb=require("./config/dbConnection");
 const errorHandler=require("./middleware/errorHandler");
 const cors=require("cors");
+const hbs=require("hbs");
+const path = require("path");
+const multer = require("multer");
+const upload = multer({ dest: 'uploads/'})
 
-hbs.registerPartials(__dirname+'/views/partials',function(err) {});
+
 
 //env file config
 const dotenv =require("dotenv");
@@ -19,6 +23,7 @@ app.use(cors());
 
 //Route for user registration and Authentication
 app.use("/api/register",require("./routes/userRoutes"));
+app.use("/api/details",require("./routes/doctorDetails"));
 
 
 //error handling middleware
@@ -44,7 +49,18 @@ app.get("/allusers",(req,res)=>{
     })
 })
 
+
+
+hbs.registerPartials(path.join(__dirname,'/views/partials'));
+
+
+/**app.post('/profile', upload.single('avatar'), function (req, res, next) {
+    console.log(req.body);
+    console.log(req.file);
+  })*/
 //APP CONFIG START
 app.listen(port,()=>{
     console.log(`Server running on port http://localhost:${port}`);
 })
+
+app.set('view engine', 'hbs');
