@@ -1,49 +1,13 @@
-const express = require('express');
+// routes/userRoutes.js
+const express = require("express");
 const router = express.Router();
-const User = require('../modals/userModel'); // Ensure the correct path to your model
+const User = require("../modals/userModel");
+const userController = require("../controllers/userController") 
+const jwtAuthMiddleware = require("../middleware/jwtAuthMiddleware")
 
-// Route to register a new user
-router.post('/register', async (req, res) => {
-	try {
-		// Destructure data from the request body
-		const {
-			firstName,
-			lastName,
-			age,
-			bloodGroup,
-			gender,
-			phoneNumber,
-			password
-		} = req.body;
 
-		// Create a new user instance
-		const newUser = new User({
-			firstName,
-			lastName,
-			age,
-			bloodGroup,
-			gender,
-			phoneNumber,
-			password
-		});
-
-		// Save the user to the database
-		await newUser.save();
-
-		// Send a success response
-		res.status(201).json({
-			message: 'User registered successfully',
-			user: newUser
-		});
-	} catch (error) {
-		console.error(error);
-
-		// Send an error response
-		res.status(400).json({
-			message: 'Error registering user',
-			error: error.message
-		});
-	}
-});
-
+// Register a new user
+// router.post("/login", jwtAuthMiddleware.generateJwtToken, userController.loginUser);
+router.post("/login", userController.loginUser);
+router.post("/register", userController.registerUser);
 module.exports = router;

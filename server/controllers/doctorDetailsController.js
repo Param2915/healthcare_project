@@ -1,38 +1,36 @@
+
 const asyncHandler = require("express-async-handler");
-const bcrypt = require("bcrypt");
-const doctor=require("../modals/doctorDetailsModel");
+const Doctor = require("../modals/doctorDetailsModel");
 require("dotenv").config();
 
-const docDetails = asyncHandler(async(req,res)=>{
-    const {name ,speciality,phoneNumber,experience,address}=req.body;
-    if(!name || !speciality || !phoneNumber || !experience || !address){
-        res.status(400);
-        throw new Error("Please provide all fields");
-    }
+const registerDoctor = asyncHandler(async (req, res) => {
+  const { name, email, speciality, phoneNumber, experience, address } = req.body;
 
-    const userExists = await doctor.findOne({name});
-    if(userExists){
-        return res.status(400).json({message: "user already exists"});
-    }
-    // //hash the password
-    // const salt = await bcrypt.genSalt(10);
-    // const hashedPassword = await bcrypt.hash(password,salt);
+  // Check for missing fields
+  if (!name || !email || !speciality || !phoneNumber || !experience || !address) {
+    res.status(400);
+    throw new Error("Please fill all fields");
+  }
 
-    //create the user
-    const Doctor = await doctor.create({
-        name,
-        speciality,
-        phoneNumber,
-        experience,
-        address,
-    });
+  // Check if the doctor already exists
+  const doctorExists = await Doctor.findOne({ email });
+  if (doctorExists) {
+    return res.status(400).json({ message: "Doctor already exists" });
+  }
 
-    res.status(201).json({message:"Doctor details found",Doctor});
+  // Create a new doctor
+  const newDoctor = await Doctor.create({
+    name,
+    email,
+    speciality,
+    phoneNumber,
+    experience,
+    address,
+  });
+
+  // Respond with success message and the created doctor
+  res.status(201).json({ message: "Doctor registered successfully", doctor: newDoctor });
 });
 
-// GET route for retrieving all doctor details
-const getDoctors = asyncHandler(async (req, res) => {
-    const doctors = await doctor.find({});
-    res.status(200).json(doctors);
-});
-module.exports={docDetails,getDoctors,}
+
+module.exports = { registerDoctor };

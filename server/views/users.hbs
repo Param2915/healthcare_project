@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Users Page</title>
 </head>
 <body>
-    <h1>hi</h1>
+    {{> _navbar}}
+    <h1>Welcome to the Home Page</h1>
+    
+    <h2>Users Information</h2>
     <ul>
-        {{#each users as |user|}}
-            <li>{{user.username}}</li>
+        {{#each users}}
+        <li>
+            <h3>{{this.name}}</h3>
+            <p>Age: {{this.age}}</p>
+            <p>Email: {{this.email}}</p>
+            <p>Role: {{this.role}}</p>
+        </li>
         {{/each}}
     </ul>
 </body>
