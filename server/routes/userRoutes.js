@@ -7,8 +7,8 @@ const jwtAuthMiddleware = require("../middleware/jwtAuthMiddleware")
 
 
 // Register a new user
-router.post("/login", jwtAuthMiddleware.generateJwtToken, userController.loginUser);
-// router.post("/login", userController.loginUser);
+// router.post("/login", jwtAuthMiddleware.generateJwtToken, userController.loginUser);
+router.post("/login", userController.loginUser);
 router.post("/register", userController.registerUser);
 
 //route for get the user specified data
